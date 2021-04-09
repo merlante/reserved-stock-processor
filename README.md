@@ -80,24 +80,48 @@ You can create a native executable using:
 ./mvnw package -Pnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+Or, if you don't have GraalVM installed, and/or you want to build for a different native target (e.g. building for linux when running on a mac), you can run the native executable build in a container using: 
 ```shell script
 ./mvnw package -Pnative -Dquarkus.native.container-build=true
+```
+Use this command (or the next variation) if you want to build an executable suitable for running in a linux-based docker image (see below).
+
+The same, but specify that docker is the container runtime, rather than podman.
+```shell script
+./mvnw package -Pnative -Dnative-image.container-runtime=docker -Dquarkus.native.container-build=true
 ```
 
 You can then execute your native executable with: `./target/reserved-stock-processor-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
 
+## Running in docker
+
+### Build
+
+Jvm image build (if you ran ./mvnw package [...] without -Pnative):
+```shell script
+docker build -f src/main/docker/Dockerfile.jvm -t [repo_name]reserved-stock-processor .
+```
+
+Native image build (if you ran ./mvnw package -Pnative):
+```shell script
+docker build -f src/main/docker/Dockerfile.native -t [repo_name]reserved-stock-processor .
+```
+
+[repo_name] could be something like "quay.io/myaccount/", with quay.io being a pushable remote repository at quay.io, or it can be blank, with only a local name of, say, "reserved-stock-processor", needed.
+
+To push to a remote:
+```shell script
+docker push [repo_name]reserved-stock-processor .
+```
+
+### Run
+
+```shell script
+docker run --rm [repo_name]reserved-stock-processor .
+```
+
 ## Related guides
 
-- SmallRye Reactive Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka)): Connect to Kafka with Reactive Messaging
 - Apache Kafka Streams ([guide](https://quarkus.io/guides/kafka-streams)): Implement stream processing applications based on Apache Kafka
-
-## Provided examples
-
-### RESTEasy JAX-RS example
-
-REST is easy peasy with this Hello World RESTEasy resource.
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
