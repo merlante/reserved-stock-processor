@@ -4,6 +4,35 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+## Quickstart
+
+### Requirements
+
+The following topics are required in your kafka cluster for this app to run:
+* orders
+* shipments
+* reserved-stock
+
+You also need a kafka cluster, a service account to access it and an oauth endpoint.
+
+### Run
+
+To run the app, add the following vars to your environment:
+
+```shell script
+export BOOTSTRAP_SERVERS=<KAFKA_BOOTSTRAP_SERVERS>
+export CLIENT_ID=<KAFKA_CLIENT_ID>
+export CLIENT_SECRET=<KAFKA_CLIENT_SECRET>
+export TOKEN_ENDPOINT_URI=<OAUTH_TOKEN_ENDPOINT_URI>
+```
+
+Then run one of the ./mvnw commands, below, e.g.
+```shell script
+./mvnw compile quarkus:dev
+```
+
+The app will connect to your kafka cluster and consume and produce records from topics, according to its KafkaStreams topology, until it is exited.
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
