@@ -1,19 +1,34 @@
 # reserved-stock-processor project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, the Supersonic Subatomic Java Framework, and KafkaStreams.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ . Or KafkaStreams: https://kafka.apache.org/documentation/streams/ .
+
+## Application
+
+This app runs a KafkaStreams topology which consumes orders and shipments (from topics of the same name) and produces a stream of stock reservations per product SKU.
+
+### Logic
+* New customer orders create reservations on stock for each product SKU and quantity ordered.
+* Shipments, or shipped orders, decrement reservations on stock for each product SKU and quantity dispatched.
+
+### Assumptions
+* orders placed will one day be dispatched in shipments, thus effectively releasing reserved stock (but they don't have to be).
+* reserved-stock (per SKU) will be used to modify in real time the latest stock-levels (per SKU) as reported by the warehouse. 
+ 
+(The available-stock-processor project: https://github.com/merlante/available-stock-processor does this last bit, producing a real time view of available stock.)
 
 ## Quickstart
 
 ### Requirements
 
+* A kafka cluster configured to use OAUTHBEARER authentication.
+* A service account with OAUTHBEARER credentials and an oauth token endpoint.
+
 The following topics are required in your kafka cluster for this app to run:
 * orders
 * shipments
 * reserved-stock
-
-You also need a kafka cluster, a service account to access it and an oauth endpoint.
 
 ### Run
 
