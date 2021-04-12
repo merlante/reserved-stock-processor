@@ -86,7 +86,7 @@ Or, if you don't have GraalVM installed, and/or you want to build for a differen
 ```
 Use this command (or the next variation) if you want to build an executable suitable for running in a linux-based docker image (see below).
 
-The same, but specify that docker is the container runtime, rather than podman.
+If you want to specify that docker is the container runtime, rather than podman, the default, do:
 ```shell script
 ./mvnw package -Pnative -Dnative-image.container-runtime=docker -Dquarkus.native.container-build=true
 ```
@@ -104,7 +104,7 @@ Jvm image build (if you ran ./mvnw package [...] without -Pnative):
 docker build -f src/main/docker/Dockerfile.jvm -t [repo_name]reserved-stock-processor .
 ```
 
-Native image build (if you ran ./mvnw package -Pnative):
+Native image build (if you ran ./mvnw package -Pnative [...]):
 ```shell script
 docker build -f src/main/docker/Dockerfile.native -t [repo_name]reserved-stock-processor .
 ```
